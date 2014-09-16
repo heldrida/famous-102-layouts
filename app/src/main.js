@@ -4,30 +4,68 @@ define(function(require, exports, module) {
 
     var Engine = require('famous/core/Engine');
     var Surface = require('famous/core/Surface');
+    var HeaderFooterLayout = require("famous/views/HeaderFooterLayout");
     var GridLayout = require('famous/views/GridLayout');
 
     var mainContext = Engine.createContext();
 
-    var grid = new GridLayout({
-        dimensions: [4, 2]
-    });
+    var layout;
 
-    var surfaces = [];
-    grid.sequenceFrom(surfaces);
+    createLayout();
+    addHeader();
+    addContent();
+    addFooter();
 
-    for (var i = 0; i < 8; i++) {
-        surfaces.push(new Surface({
-            content: "panel " + (i + 1),
-            size: [undefined, undefined],
+    function createLayout() {
+        layout = new HeaderFooterLayout({
+            headerSize: 100,
+            footerSize: 50
+        });
+
+        mainContext.add(layout);
+    }
+
+    function addHeader() {
+        layout.header.add(new Surface({
+            content: "Header",
+            classes: ["grey-bg"],
             properties: {
-                backgroundColor: "hsl(" + (i * 360 / 8) + ", 100%, 50%)",
-                color: "#404040",
-                lineHeight: "200px",
+                lineHeight: "100px",
                 textAlign: "center"
             }
         }));
     }
 
-    mainContext.add(grid);
+    function addContent() {
+        layout.content.add(createGrid('content', [2, 1]));
+    }
+
+    function addFooter() {
+        layout.footer.add(createGrid('footer', [3, 1]));
+    }
+
+    function createGrid(section, dimensions) {
+        var grid = new GridLayout({
+            dimensions: dimensions
+        });
+
+        var surfaces = [];
+        grid.sequenceFrom(surfaces);
+
+        for (var i = 0; i < dimensions[0]; i++) {
+            surfaces.push(new Surface({
+                content: section + ' ' + (i + 1),
+                size: [undefined, undefined],
+                properties: {
+                    backgroundColor: "hsl(" + (i * 360 / 8) + ", 100%, 50%)",
+                    color: "#404040",
+                    textAlign: "center"
+                }
+            }));
+        }
+
+        return grid;
+
+    }
 
 });
