@@ -27,7 +27,8 @@ define(function(require, exports, module) {
         classes: ["grey-bg"],
         properties: {
             lineHeight: "400px",
-            textAlign: "center"
+            textAlign: "center",
+            backgroundColor: "#333"
         }
     }));
 
